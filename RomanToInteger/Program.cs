@@ -4,27 +4,37 @@ using System.Linq;
 
 namespace RomanToInteger
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            string roman1 = "VI";
-            int interger1 = RomanToInt(roman1);
-            Console.WriteLine("Roman: {0} = Integer: {1}", roman1, interger1);
+            try
+            {
+                string roman1 = "XXXVIII"; //38
+                int interger1 = RomanToInt(roman1);
+                Console.WriteLine("Roman: {0} = Integer: {1}", roman1, interger1);
 
-            string roman2 = "IV";
-            int interger2 = RomanToInt(roman2);
-            Console.WriteLine("Roman: {0} = Integer: {1}", roman2, interger2);
+                string roman2 = "LXXXIV"; //84
+                int interger2 = RomanToInt(roman2);
+                Console.WriteLine("Roman: {0} = Integer: {1}", roman2, interger2);
 
-            //string roman3 = "";
-            //int interger3 = RomanToInt(roman3);
-            //Console.WriteLine("Roman: {0} = Integer: {1}", roman1, interger3);
+                string roman3 = "CMXCIX"; //999
+                int interger3 = RomanToInt(roman3);
+                Console.WriteLine("Roman: {0} = Integer: {1}", roman3, interger3);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+            }
         }
 
-        public static int RomanToInt(string romanNumber)
-        {
-            //Building a map between Roman and Integer values
-            var dictionary = new Dictionary<char, int>(){
+        /// <summary>
+        /// The map between Roman and Integer values
+        /// </summary>
+        public static class RomanIntegerMap
+        {            
+            private static readonly Dictionary<char, int> _map = new Dictionary<char, int>()
+            {
                 {'I',1},
                 {'V',5},
                 {'X',10},
@@ -34,45 +44,68 @@ namespace RomanToInteger
                 {'M',1000}
             };
 
-            var value = 0;
+            public static int GetValueByKey(char Key)
+            {
+                return _map.GetValueOrDefault(Key);
+            }
+        }
+
+        /// <summary>
+        /// Convert any Roman number into an Integer
+        /// </summary>
+        /// <param name="romanNumber"></param>
+        /// <returns></returns>
+        public static int RomanToInt(string romanNumber)
+        {
+            var convertionValue = 0;
 
             if (!string.IsNullOrWhiteSpace(romanNumber) && (romanNumber.Length >= 1) && (romanNumber.Length <= 15))
             {
-                var keybefore = char.MinValue;
+                var previousKey = new char();
                 var romanNumberReversedList = romanNumber.Reverse<char>();
 
                 //Reverse loop
-                foreach (var key in romanNumberReversedList)
+                foreach (var actualKey in romanNumberReversedList)
                 {
-                    if (keybefore.Equals(char.MinValue))
+                    if (IsSubtraction(actualKey, previousKey))
                     {
-                        keybefore = key;
-                        value += dictionary.GetValueOrDefault(key);
+                        convertionValue -= RomanIntegerMap.GetValueByKey(actualKey);
                     }
                     else
                     {
-                        //I can be placed before V(5) and X(10) to make 4 and 9.
-                        if (key.Equals('I'))
-                            if ((keybefore.Equals('V')) || (keybefore.Equals('X')))
-                            {
-                                value -= dictionary.GetValueOrDefault(key);
-                            }
-                            else
-                            {
-                                value += dictionary.GetValueOrDefault(key);
-                            }
+                        convertionValue += RomanIntegerMap.GetValueByKey(actualKey);
                     }
 
-                    //X can be placed before L(50) and C(100) to make 40 and 90.
-                    //C can be placed before D(500) and M(1000) to make 400 and 900.                    
+                    previousKey = actualKey;
                 }
             }
-            return value;
+            return convertionValue;
         }
 
-        public bool CheckSmallestToLargest(char c)
+        /// <summary>
+        /// Verifies if a subtraction is necessary in cases of Integer numbers such as 4, 9, 40, 90, 400 or 900.
+        /// </summary>
+        /// <param name="key">the actual key</param>
+        /// <param name="previousKey">the previous</param>
+        /// <returns>True in case it is a subtrasction situation</returns>
+        private static bool IsSubtraction(char key, char previousKey)
         {
-            return true;
+            if ((key.Equals('I'))
+                && ((previousKey.Equals('V')) || (previousKey.Equals('X')))) //I(1) placed before V(5) and X(10) to make 4 and 9.             
+            {
+                return true;
+            }
+            else if ((key.Equals('X'))
+                && ((previousKey.Equals('L')) || (previousKey.Equals('C'))))//X(10) placed before L(50) and C(100) to make 40 and 90.
+            {
+                return true;
+            }
+            else if ((key.Equals('C'))
+                && ((previousKey.Equals('D')) || (previousKey.Equals('M'))))//C(100) placed before D(500) and M(1000) to make 400 and 900.
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
