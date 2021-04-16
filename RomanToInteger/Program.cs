@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RomanToInteger
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
@@ -29,28 +28,6 @@ namespace RomanToInteger
         }
 
         /// <summary>
-        /// The map between Roman and Integer values
-        /// </summary>
-        public static class RomanIntegerMap
-        {            
-            private static readonly Dictionary<char, int> _map = new Dictionary<char, int>()
-            {
-                {'I',1},
-                {'V',5},
-                {'X',10},
-                {'L',50},
-                {'C',100},
-                {'D',500},
-                {'M',1000}
-            };
-
-            public static int GetValueByKey(char Key)
-            {
-                return _map.GetValueOrDefault(Key);
-            }
-        }
-
-        /// <summary>
         /// Convert any Roman number into an Integer
         /// </summary>
         /// <param name="romanNumber"></param>
@@ -67,14 +44,9 @@ namespace RomanToInteger
                 //Reverse loop
                 foreach (var actualKey in romanNumberReversedList)
                 {
-                    if (IsSubtraction(actualKey, previousKey))
-                    {
-                        convertionValue -= RomanIntegerMap.GetValueByKey(actualKey);
-                    }
-                    else
-                    {
-                        convertionValue += RomanIntegerMap.GetValueByKey(actualKey);
-                    }
+                    convertionValue = IsSubtraction(actualKey, previousKey)
+                        ? convertionValue -= RomanIntegerMap.GetValueByKey(actualKey)
+                        : convertionValue += RomanIntegerMap.GetValueByKey(actualKey);
 
                     previousKey = actualKey;
                 }
