@@ -9,15 +9,15 @@ namespace RomanToInteger
         /// </summary>
         public static class RomanIntegerMap
         {            
-            private static readonly Dictionary<char, int> _map = new Dictionary<char, int>()
+            private static readonly Dictionary<char, int> _map = new()
             {
-                {'I',1},
-                {'V',5},
-                {'X',10},
-                {'L',50},
-                {'C',100},
-                {'D',500},
-                {'M',1000}
+                { Roman.I.Value, 1},
+                { Roman.V.Value, 5},
+                { Roman.X.Value, 10},
+                { Roman.L.Value, 50},
+                { Roman.C.Value, 100},
+                { Roman.D.Value, 500},
+                { Roman.M.Value, 1000}                
             };
 
             public static int GetValueByKey(char Key)

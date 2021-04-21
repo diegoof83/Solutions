@@ -62,18 +62,18 @@ namespace RomanToInteger
         /// <returns>True in case it is a subtrasction situation</returns>
         private static bool IsSubtraction(char key, char previousKey)
         {
-            if ((key.Equals('I'))
-                && ((previousKey.Equals('V')) || (previousKey.Equals('X')))) //I(1) placed before V(5) and X(10) to make 4 and 9.             
+            if ((key.Equals(Roman.I.Value))
+                && ((previousKey.Equals(Roman.V.Value)) || (previousKey.Equals(Roman.X.Value)))) //I(1) placed before V(5) and X(10) to make 4 and 9.             
             {
                 return true;
             }
-            else if ((key.Equals('X'))
-                && ((previousKey.Equals('L')) || (previousKey.Equals('C'))))//X(10) placed before L(50) and C(100) to make 40 and 90.
+            else if ((key.Equals(Roman.X.Value))
+                && ((previousKey.Equals(Roman.L.Value)) || (previousKey.Equals(Roman.C.Value))))//X(10) placed before L(50) and C(100) to make 40 and 90.
             {
                 return true;
             }
-            else if ((key.Equals('C'))
-                && ((previousKey.Equals('D')) || (previousKey.Equals('M'))))//C(100) placed before D(500) and M(1000) to make 400 and 900.
+            else if ((key.Equals(Roman.C.Value))
+                && ((previousKey.Equals(Roman.D.Value)) || (previousKey.Equals(Roman.M.Value))))//C(100) placed before D(500) and M(1000) to make 400 and 900.
             {
                 return true;
             }
